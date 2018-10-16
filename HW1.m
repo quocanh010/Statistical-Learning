@@ -13,10 +13,22 @@ Prior_Backgtound = size(Background, 1) / (size(Cheetah,1) + size(Background, 1))
 I_Cheetah = I_Cheetah + 1
 I_Backgrough = I_Backgrough + 1
 % Draw histogram of the index
-P_X_g_Y_Cheetah = histogram(I_Cheetah, 'Normalization','probability')
-P_X_g_Y_Background = histogram(I_Backgrough , 'Normalization','probability')
+P_X_g_Y_Cheetah = histogram(I_Cheetah,'NumBins', 63, 'BinLimits', [2 64], 'Normalization','probability')
+P_X_g_Y_Background = histogram(I_Backgrough,'NumBins', 63, 'BinLimits', [2 64], 'Normalization','probability')
 
 
 % Calculating P_Y_g_X
 img = imread('cheetah.bmp')
+% Normalizing Image
+img = im2double(img)
+
+%Vectorize 8-8 block with zig-zag pattern
+fileID = fopen('Zig-Zag Pattern.txt')
+formatSpec = '%i'
+index_v = fscanf(fileID,formatSpec)
+index_v = int16(index_v)
+index_v = index_v + 1
 %compute dct
+
+
+w = [8,8]
