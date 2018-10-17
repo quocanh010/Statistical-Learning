@@ -8,6 +8,6 @@ function index_v = zig_zag_v(x)
     ind(:,1:2:end) = flipud( ind(:,1:2:end) );  %# reverse order of odd columns
     ind(ind==0) = [];                           %# keep non-zero indices
     v = x_dct(ind)
-    [value, index_v] = max(abs(v(2:end)))
+    [~, index_v] = max(abs(v(2:end)))
     index_v = index_v + 1
 end
