@@ -31,7 +31,7 @@ index_v = fscanf(fileID,formatSpec)
 index_v = int16(index_v)
 index_v = index_v + 1
 %Padding to teh image
-B = padarray(img, [7 7], 'symmetric','post')
+B = padarray(img, [7 7], 'symmetric','pre')
 %compute ans sliding window
 %  for i = 1:size(img, 1) 
 %      for j = 1:size(img, 2) 
@@ -43,9 +43,21 @@ result = nlfilter(  B , [8 8], @zig_zag_v)
 Cheetah_m = C_Cheetah(result) .* Prior_Cheetah
 Background_m = C_Background(result) .* Prior_Background
 n_img = Background_m <= Cheetah_m
-n_img = n_img(1:255, 1:270)
+n_img = n_img(8:262, 8:277)
 imagesc(n_img)
 colormap(gray(256))
 axis equal
 
 masked_cheetah = imread('cheetah_mask.bmp')
+masked_cheetah = im2double(masked_cheetah)
+v = find(masked_cheetah)
+v1 = find(~masked_cheetah)
+flat_v = n_img(:)
+% Calculating error
+P_Cheetah_g_Cheetah = nnz(flat_v(v) == 0) / numel(flat_v(v))
+P_Cheetah_g_Backgound = nnz(flat_v(v1) == 1) / numel(flat_v(v1))
+
+P_e = P_Cheetah_g_Backgound * Prior_Background + (1 - P_Cheetah_g_Cheetah) * Prior_Cheetah
+
+
+
